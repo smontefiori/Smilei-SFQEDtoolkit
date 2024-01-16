@@ -808,7 +808,8 @@ void SmileiMPI::isend_species( Patch *patch, int to, int &irequest, int tag, Par
         patch->buffer_scalars_particles[i+1] = patch->vecSpecies[ispec]->nrj_new_part_; // injected
         patch->buffer_scalars_particles[i+2] = patch->vecSpecies[ispec]->nrj_mw_out; // lost by moving window
         patch->buffer_scalars_particles[i+3] = patch->vecSpecies[ispec]->nrj_mw_inj; // gained by moving window
-        if( params.has_MC_radiation_ || params.has_LL_radiation_ || params.has_Niel_radiation_ ) {
+        if( params.has_MC_radiation_ || params.has_SFQEDtk_lcfa_radiation_ || params.has_SFQEDtk_lcfa_radiation_ 
+            || params.has_LL_radiation_ || params.has_Niel_radiation_ ) {
             patch->buffer_scalars_particles[i+4] = patch->vecSpecies[ispec]->nrj_radiated_; // radiated energy
         }
     }

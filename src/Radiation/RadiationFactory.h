@@ -38,8 +38,17 @@ public:
     {
         Radiation *Radiate = NULL;
 
-        // assign the correct Radiation model to Radiate
+        /* Assign the correct Radiation model to Radiate */
+        // Monte-Carlo
         if( species->radiation_model_ == "mc" ) {
+            Radiate = new RadiationMonteCarlo( params, species, rand  );
+        }
+        // Monte-Carlo using the SFQEDToolkit (within LCFA)
+        else if( species->radiation_model_ == "sfqedtk-lcfa" ) {
+            Radiate = new RadiationMonteCarlo( params, species, rand  );
+        }
+        // Monte-Carlo using the SFQEDToolkit (beyond LCFA)
+        else if( species->radiation_model_ == "sfqedtk-bydlcfa" ) {
             Radiate = new RadiationMonteCarlo( params, species, rand  );
         }
         // Corrected LL + stochastic diffusive operator

@@ -302,6 +302,10 @@ public:
 
     //! Tells whether there is a species with Monte-Carlo Compton radiation
     bool has_MC_radiation_;
+    //! Tells whether there is a species with Monte-Carlo Compton radiation using the SFQED Toolkit (within the LCFA)
+    bool has_SFQEDtk_lcfa_radiation_;
+    //! Tells whether there is a species with Monte-Carlo Compton radiation using the SFQED Toolkit (beyond the LCFA)
+    bool has_SFQEDtk_bydlcfa_radiation_;
     //! Tells whether there is a species with Continuous radiation loss.
     bool has_LL_radiation_;
     //! Tells whether there is a species with the stochastic radiation loss

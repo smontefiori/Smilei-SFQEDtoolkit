@@ -130,6 +130,13 @@ public:
                 radiation_model = "mc";
                 this_species->particles->has_Monte_Carlo_process = true;
                 MESSAGE( 2, "> Radiating species with the stochastic Monte-Carlo model" );
+            } else if( radiation_model == "sfqedtk-lcfa" ) {
+                this_species->particles->has_Monte_Carlo_process = true;
+                MESSAGE( 2, "> Radiating species using the SFQEDtoolkit (with LCFA)" );
+            } else if( radiation_model == "sfqedtk-bydlcfa" ) {
+                this_species->particles->has_Monte_Carlo_process = true;
+                MESSAGE( 2, "> Radiating species using the SFQEDtoolkit (beyond LCFA)" );
+    
             } else if( radiation_model == "landau-lifshitz" || radiation_model == "ll" ) {
                 radiation_model = "ll";
                 MESSAGE( 2, "> Radiating species with the classical Landau-Lifshitz radiating model" );

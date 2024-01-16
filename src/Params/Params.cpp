@@ -908,6 +908,8 @@ Params::Params( SmileiMPI *smpi, std::vector<std::string> namelistsFiles ) :
     // Parameters for the synchrotron-like radiation losses
     // -------------------------------------------------------
     has_MC_radiation_ = false ;// Default value
+    has_SFQEDtk_lcfa_radiation_ = false;// Default value
+    has_SFQEDtk_bydlcfa_radiation_ = false;// Default value
     has_LL_radiation_ = false ;// Default value
     has_Niel_radiation_ = false ;// Default value
     has_diag_radiation_spectrum_ = false; // Default value
@@ -924,6 +926,11 @@ Params::Params( SmileiMPI *smpi, std::vector<std::string> namelistsFiles ) :
 
         if( radiation_model=="monte-carlo" || radiation_model=="mc" ) {
             has_MC_radiation_ = true;
+        } else if( radiation_model=="sfqedtk-lcfa" ) {
+            has_SFQEDtk_lcfa_radiation_ = true;
+        } else if( radiation_model=="sfqedtk-bydlcfa" ) {
+            has_SFQEDtk_bydlcfa_radiation_ = true;    
+    
         } else if( radiation_model=="landau-lifshitz"
                    || radiation_model=="ll"
                    || radiation_model=="corrected-landau-lifshitz"
