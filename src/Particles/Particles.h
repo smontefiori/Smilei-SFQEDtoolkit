@@ -457,6 +457,12 @@ public:
     virtual uint64_t* getPtrId() {
         return &(Id[0]);
     };
+    virtual double* getPtrFormerPerpForce( int idim) {
+        return ((std::size_t)idim < formerPerpForce.size()) ? formerPerpForce[idim].data() : nullptr;
+    };
+    virtual double* getPtrDeltaPerpForce( int idim) {
+        return ((std::size_t)idim < deltaPerpForce.size()) ? deltaPerpForce[idim].data() : nullptr;
+    };
     virtual double* getPtrTau() {
         return (has_Monte_Carlo_process ? Tau.data() : nullptr);
     };
@@ -528,6 +534,12 @@ public:
     //! array of particle quantum parameters
     std::vector<double> Chi;
 
+    //! array of particle former force (for SFQEDToolkit)
+    std::vector< std::vector<double> >  formerPerpForce;
+
+    //! array of particle delta of former force (for SFQEDToolkit)
+    std::vector< std::vector<double> >  deltaPerpForce;
+
     //! array of optical depths for the Monte-Carlo process
     std::vector<double> Tau;
 
@@ -563,6 +575,9 @@ public:
     //! Monte-Carlo process such as:
     //! - discontinuous radiation reaction force
     bool has_Monte_Carlo_process;
+
+    //! Used by SFQEDToolkit if using beyond the LCFA radiation 
+    bool has_to_keep_former_force;
 
     unsigned int host_nparts_;
 

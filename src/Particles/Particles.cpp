@@ -36,10 +36,13 @@ Particles::Particles():
     Position.resize( 0 );
     Position_old.resize( 0 );
     Momentum.resize( 0 );
+    formerPerpForce.resize( 0 );
+    deltaPerpForce.resize( 0 );
     cell_keys.resize( 0 );
     is_test = false;
     has_quantum_parameter = false;
     has_Monte_Carlo_process = false;
+    has_to_keep_former_force = false;
     
     interpolated_fields_ = nullptr;
     
@@ -104,6 +107,15 @@ void Particles::initialize( unsigned int nParticles, unsigned int nDim, bool kee
         if( has_Monte_Carlo_process ) {
             double_prop_.push_back( &Tau );
         }
+
+        // Saves former Lorentz force and delta of the force
+        // used by the SFQEDToolkit to compute beyond the LCFA radiation
+        if( has_to_keep_former_force ) {
+            for( unsigned int i = 0; i < 3; i++ ) {
+                double_prop_.push_back( &( formerPerpForce[i] ) );
+                double_prop_.push_back( &( deltaPerpForce[i] ) );
+            }
+        }
         
         if( interpolated_fields_ ) {
             for( size_t i = 0; i < interpolated_fields_->mode_.size(); i++ ) {
@@ -127,6 +139,8 @@ void Particles::initialize( unsigned int nParticles, Particles &part )
     has_quantum_parameter = part.has_quantum_parameter;
 
     has_Monte_Carlo_process = part.has_Monte_Carlo_process;
+
+    has_to_keep_former_force = part.has_to_keep_former_force;
     
     if( part.interpolated_fields_ && ! interpolated_fields_ ) {
         interpolated_fields_ = new InterpolatedFields();
@@ -171,6 +185,15 @@ void Particles::reserve( unsigned int reserved_particles,
 
     if( has_quantum_parameter ) {
         Chi.reserve( reserved_particles );
+    }
+
+    if( has_to_keep_former_force ) {
+        formerPerpForce.resize( 3 ) ;
+        deltaPerpForce.resize( 3 );
+        for( unsigned int i = 0; i < 3; i++ ) {
+            formerPerpForce[i].reserve( reserved_particles );
+            deltaPerpForce[i].reserve( reserved_particles );
+        }
     }
 
     if( has_Monte_Carlo_process ) {
@@ -241,6 +264,15 @@ void Particles::resize( unsigned int nParticles,
 
     if( has_quantum_parameter ) {
         Chi.resize( nParticles, 0. );
+    }
+
+    if( has_to_keep_former_force ) {
+        formerPerpForce.resize( 3 ) ;
+        deltaPerpForce.resize( 3 );
+        for( unsigned int i = 0; i < 3; i++ ) {
+            formerPerpForce[i].resize( nParticles, 0. );
+            deltaPerpForce[i].resize( nParticles, 0. );
+        }
     }
 
     if( has_Monte_Carlo_process ) {
@@ -444,6 +476,15 @@ void Particles::makeParticleAt( Particles &source_particles, unsigned int ipart,
         Chi.push_back( 0. );
     }
 
+    if( has_to_keep_former_force ) {
+        formerPerpForce[0].push_back( 0. );
+        formerPerpForce[1].push_back( 0. );
+        formerPerpForce[2].push_back( 0. );
+        deltaPerpForce[0].push_back( 0. );
+        deltaPerpForce[1].push_back( 0. );
+        deltaPerpForce[2].push_back( 0. );
+    }
+
     if( has_Monte_Carlo_process ) {
         Tau.push_back( 0. );
     }
@@ -552,6 +593,15 @@ void Particles::print( unsigned int iPart )
         cout << Chi[iPart] << endl;
     }
 
+    if( has_to_keep_former_force) {
+        for( unsigned int i=0; i<3; i++ ) {
+            cout << formerPerpForce[i][iPart] << " ";
+        }
+        for( unsigned int i=0; i<3; i++ ) {
+            cout << deltaPerpForce[i][iPart] << " ";
+        }
+    }
+
     if( has_Monte_Carlo_process ) {
         cout << Tau[iPart] << endl;
     }
@@ -581,6 +631,15 @@ ostream &operator << ( ostream &out, const Particles &particles )
 
         if( particles.has_quantum_parameter ) {
             out << particles.Chi[iPart] << endl;
+        }
+
+        if( has_to_keep_former_force) {
+            for( unsigned int i=0; i<3; i++ ) {
+                out << formerPerpForce[i][iPart] << " ";
+            }
+            for( unsigned int i=0; i<3; i++ ) {
+                out << deltaPerpForce[i][iPart] << " ";
+            }
         }
 
         if( particles.has_Monte_Carlo_process ) {
@@ -1279,7 +1338,7 @@ bool Particles::testMove( int iPartStart, int iPartEnd, Params &params )
         double dx2 = params.cell_length[iDim];//*params.cell_length[iDim];
         for( int iPart = iPartStart ; iPart < iPartEnd ; iPart++ ) {
             if( dist( iPart, iDim ) > dx2 ) {
-                ERROR( "Too large displacment for particle : " << iPart << "\t: " << ( *this )( iPart ) );
+                ERROR( "Too large displacement for particle : " << iPart << "\t: " << ( *this )( iPart ) );
                 return false;
             }
         }
