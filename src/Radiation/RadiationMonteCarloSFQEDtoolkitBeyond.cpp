@@ -415,7 +415,7 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
                     //                                             particle_chi);
 
                     // double photon_gamma = SFQED_BLCFA_INV_COMPTON_PHOTON_energy(LCFA_threshold, particle_gamma, particle_chi, random_number, rnd2);
-                    
+                    double photon_gamma = 0;
                     //the chi parameter in this case is defined after
                     //***********************************************
 
