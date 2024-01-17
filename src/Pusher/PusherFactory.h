@@ -19,6 +19,7 @@
 #include "PusherBorisNR.h"
 #include "PusherHigueraCary.h"
 #include "PusherPhoton.h"
+#include "PusherBorisBeyond.h"
 
 #include "Params.h"
 #include "Species.h"
@@ -87,6 +88,8 @@ public:
                 if (params.use_BTIS3 && (n_envlaser >=1)) {
                     Push = new PusherPonderomotiveBorisBTIS3( params, species );
                 }
+            } else if (species->pusher_name_ == "borisby"){
+                Push = new PusherBorisBeyond( params, species );
             } else {
                 ERROR_NAMELIST( "For species " << species->name_
                        << ": unknown pusher `"

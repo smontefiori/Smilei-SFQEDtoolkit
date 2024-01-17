@@ -11,6 +11,8 @@
 
 #include "Radiation.h"
 #include "RadiationMonteCarlo.h"
+#include "RadiationMonteCarloSFQEDtoolkit.h"
+#include "RadiationMonteCarloSFQEDtoolkitBeyond.h"
 #include "RadiationCorrLandauLifshitz.h"
 #include "RadiationLandauLifshitz.h"
 #include "RadiationDiagRadiationSpectrum.h"
@@ -49,7 +51,7 @@ public:
         }
         // Monte-Carlo using the SFQEDToolkit (beyond LCFA)
         else if( species->radiation_model_ == "sfqedtk-bydlcfa" ) {
-            Radiate = new RadiationMonteCarlo( params, species, rand  );
+            Radiate = new RadiationMonteCarloSFQEDtoolkitBeyond( params, species, rand  );
         }
         // Corrected LL + stochastic diffusive operator
         else if( species->radiation_model_ == "niel" ) {
