@@ -30,9 +30,9 @@ private:
     //! particle quantum parameter
     double Chi;
     //! particle former force
-    std::vector<double>  formerPerpForce;
+    std::vector<double>  FormerPerpForce;
     //! particle delta on former force
-    std::vector<double>  deltaPerpForce;
+    std::vector<double>  DeltaPerpForce;
     //! particle optical depth for Monte-Carlo processes
     double Tau;
     //! particle charge state

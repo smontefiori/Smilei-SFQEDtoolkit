@@ -23,12 +23,12 @@ Particle::Particle( Particles &parts, int iPart )
     if( parts.Chi.size() ) {
         Chi = parts.chi( iPart );
     }
-    if( parts.formerPerpForce.size() ){
-        formerPerpForce.resize( 3 );
-        deltaPerpForce.resize( 3 );
+    if( parts.FormerPerpForce.size() ){
+        FormerPerpForce.resize( 3 );
+        DeltaPerpForce.resize( 3 );
         for( int iDim = 0 ; iDim < 3 ; iDim++ ) {
-            formerPerpForce[iDim] = parts.formerPerpForce( iDim, iPart );
-            deltaPerpForce[iDim] = parts.deltaPerpForce( iDim, iPart );
+            FormerPerpForce[iDim] = parts.formerPerpForce( iDim, iPart );
+            DeltaPerpForce[iDim] = parts.deltaPerpForce( iDim, iPart );
         }
     }
     if( parts.Tau.size() ) {
@@ -62,8 +62,8 @@ ostream &operator << ( ostream &out, const Particle &particle )
     }
     if( 0 ) {
         for( unsigned int i=0; i<3; i++ ) {
-            out << particle.formerPerpForce[i] << " ";
-            out << particle.deltaPerpForce[i] << " ";
+            out << particle.FormerPerpForce[i] << " ";
+            out << particle.DeltaPerpForce[i] << " ";
         }
     }
     if( 0 ) {

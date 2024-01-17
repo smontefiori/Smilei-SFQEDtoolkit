@@ -363,6 +363,38 @@ public:
         return Chi;
     }
 
+    //! Method used to get the Particle former perpendicular force
+    inline double  formerPerpForce( unsigned int idim, unsigned int ipart ) const
+    {
+        return FormerPerpForce[idim][ipart];
+    }
+    //! Method used to set a new value to the Particle former perpendicular force
+    inline double &formerPerpForce( unsigned int idim, unsigned int ipart )
+    {
+        return FormerPerpForce[idim][ipart];
+    }
+    //! Method used to get the Particle former perpendicular force
+    inline std::vector<double>  formerPerpForce( unsigned int idim ) const
+    {
+        return FormerPerpForce[idim];
+    }
+
+    //! Method used to get the Particle former perpendicular force
+    inline double  deltaPerpForce( unsigned int idim, unsigned int ipart ) const
+    {
+        return DeltaPerpForce[idim][ipart];
+    }
+    //! Method used to set a new value to the Particle former perpendicular force
+    inline double &deltaPerpForce( unsigned int idim, unsigned int ipart )
+    {
+        return DeltaPerpForce[idim][ipart];
+    }
+    //! Method used to get the Particle former perpendicular force
+    inline std::vector<double>  deltaPerpForce( unsigned int idim ) const
+    {
+        return DeltaPerpForce[idim];
+    }
+
     //! Method used to get the Particle optical depth
     inline double  tau( unsigned int ipart ) const
     {
@@ -458,10 +490,10 @@ public:
         return &(Id[0]);
     };
     virtual double* getPtrFormerPerpForce( int idim) {
-        return ((std::size_t)idim < formerPerpForce.size()) ? formerPerpForce[idim].data() : nullptr;
+        return ((std::size_t)idim < FormerPerpForce.size()) ? FormerPerpForce[idim].data() : nullptr;
     };
     virtual double* getPtrDeltaPerpForce( int idim) {
-        return ((std::size_t)idim < deltaPerpForce.size()) ? deltaPerpForce[idim].data() : nullptr;
+        return ((std::size_t)idim < DeltaPerpForce.size()) ? DeltaPerpForce[idim].data() : nullptr;
     };
     virtual double* getPtrTau() {
         return (has_Monte_Carlo_process ? Tau.data() : nullptr);
@@ -523,7 +555,7 @@ public:
     std::vector< std::vector<double> > Position;
 
     //! array of particle former (old) positions
-    std::vector< std::vector<double> >Position_old;
+    std::vector< std::vector<double> > Position_old;
 
     //! array of particle momenta
     std::vector< std::vector<double> >  Momentum;
@@ -535,10 +567,10 @@ public:
     std::vector<double> Chi;
 
     //! array of particle former force (for SFQEDToolkit)
-    std::vector< std::vector<double> >  formerPerpForce;
+    std::vector< std::vector<double> > FormerPerpForce;
 
     //! array of particle delta of former force (for SFQEDToolkit)
-    std::vector< std::vector<double> >  deltaPerpForce;
+    std::vector< std::vector<double> > DeltaPerpForce;
 
     //! array of optical depths for the Monte-Carlo process
     std::vector<double> Tau;

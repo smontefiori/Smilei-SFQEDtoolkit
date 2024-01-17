@@ -36,8 +36,8 @@ Particles::Particles():
     Position.resize( 0 );
     Position_old.resize( 0 );
     Momentum.resize( 0 );
-    formerPerpForce.resize( 0 );
-    deltaPerpForce.resize( 0 );
+    FormerPerpForce.resize( 0 );
+    DeltaPerpForce.resize( 0 );
     cell_keys.resize( 0 );
     is_test = false;
     has_quantum_parameter = false;
@@ -112,8 +112,8 @@ void Particles::initialize( unsigned int nParticles, unsigned int nDim, bool kee
         // used by the SFQEDToolkit to compute beyond the LCFA radiation
         if( has_to_keep_former_force ) {
             for( unsigned int i = 0; i < 3; i++ ) {
-                double_prop_.push_back( &( formerPerpForce[i] ) );
-                double_prop_.push_back( &( deltaPerpForce[i] ) );
+                double_prop_.push_back( &( FormerPerpForce[i] ) );
+                double_prop_.push_back( &( DeltaPerpForce[i] ) );
             }
         }
         
@@ -188,11 +188,11 @@ void Particles::reserve( unsigned int reserved_particles,
     }
 
     if( has_to_keep_former_force ) {
-        formerPerpForce.resize( 3 ) ;
-        deltaPerpForce.resize( 3 );
+        FormerPerpForce.resize( 3 ) ;
+        DeltaPerpForce.resize( 3 );
         for( unsigned int i = 0; i < 3; i++ ) {
-            formerPerpForce[i].reserve( reserved_particles );
-            deltaPerpForce[i].reserve( reserved_particles );
+            FormerPerpForce[i].reserve( reserved_particles );
+            DeltaPerpForce[i].reserve( reserved_particles );
         }
     }
 
@@ -267,11 +267,11 @@ void Particles::resize( unsigned int nParticles,
     }
 
     if( has_to_keep_former_force ) {
-        formerPerpForce.resize( 3 ) ;
-        deltaPerpForce.resize( 3 );
+        FormerPerpForce.resize( 3 ) ;
+        DeltaPerpForce.resize( 3 );
         for( unsigned int i = 0; i < 3; i++ ) {
-            formerPerpForce[i].resize( nParticles, 0. );
-            deltaPerpForce[i].resize( nParticles, 0. );
+            FormerPerpForce[i].resize( nParticles, 0. );
+            DeltaPerpForce[i].resize( nParticles, 0. );
         }
     }
 
@@ -477,12 +477,12 @@ void Particles::makeParticleAt( Particles &source_particles, unsigned int ipart,
     }
 
     if( has_to_keep_former_force ) {
-        formerPerpForce[0].push_back( 0. );
-        formerPerpForce[1].push_back( 0. );
-        formerPerpForce[2].push_back( 0. );
-        deltaPerpForce[0].push_back( 0. );
-        deltaPerpForce[1].push_back( 0. );
-        deltaPerpForce[2].push_back( 0. );
+        FormerPerpForce[0].push_back( 0. );
+        FormerPerpForce[1].push_back( 0. );
+        FormerPerpForce[2].push_back( 0. );
+        DeltaPerpForce[0].push_back( 0. );
+        DeltaPerpForce[1].push_back( 0. );
+        DeltaPerpForce[2].push_back( 0. );
     }
 
     if( has_Monte_Carlo_process ) {
@@ -595,10 +595,10 @@ void Particles::print( unsigned int iPart )
 
     if( has_to_keep_former_force) {
         for( unsigned int i=0; i<3; i++ ) {
-            cout << formerPerpForce[i][iPart] << " ";
+            cout << FormerPerpForce[i][iPart] << " ";
         }
         for( unsigned int i=0; i<3; i++ ) {
-            cout << deltaPerpForce[i][iPart] << " ";
+            cout << DeltaPerpForce[i][iPart] << " ";
         }
     }
 
@@ -633,12 +633,12 @@ ostream &operator << ( ostream &out, const Particles &particles )
             out << particles.Chi[iPart] << endl;
         }
 
-        if( has_to_keep_former_force) {
+        if( particles.has_to_keep_former_force) {
             for( unsigned int i=0; i<3; i++ ) {
-                out << formerPerpForce[i][iPart] << " ";
+                out << particles.FormerPerpForce[i][iPart] << " ";
             }
             for( unsigned int i=0; i<3; i++ ) {
-                out << deltaPerpForce[i][iPart] << " ";
+                out << particles.DeltaPerpForce[i][iPart] << " ";
             }
         }
 
