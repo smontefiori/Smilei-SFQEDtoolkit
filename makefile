@@ -48,11 +48,24 @@ endif
 #-----------------------------------------------------
 # Directories and files
 
-# Smilei
-DIRS := $(shell find src -type d)
-SRCS := $(shell find src/* -name \*.cpp)
-OBJS := $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o))
-DEPS := $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.d))
+ifneq (,$(call parse_config,sfqedtoolkit))
+	# Set SFQEDtoolkit link environment
+	CXXFLAGS += -DSMILEI_SFQEDTOOLKIT
+	LDFLAGS += -lstdc++
+
+	# SFQEDtoolkit related directories and sources
+	DIRS := $(shell find src_SFQEDtoolkit src -type d)
+	SRCS := $(shell find src_SFQEDtoolkit/* src/* -name \*.cpp)
+	OBJS := $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o))
+	DEPS := $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.d))
+else
+	# Smilei
+	DIRS := $(shell find src -type d)
+	SRCS := $(shell find src/* -name \*.cpp)
+	OBJS := $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o))
+	DEPS := $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.d))
+endif
+
 SITEDIR = $(shell $(PYTHONEXE) -c 'import site; site._script()' --user-site)
 
 # Smilei tools
@@ -223,7 +236,6 @@ ifneq (,$(call parse_config,picsar))
 	#LDFLAGS += -lgfortran
 endif
 
-
 # Manage MPI communications by a single thread (master in MW)
 ifneq (,$(call parse_config,no_mpi_tm))
     CXXFLAGS += -D_NO_MPI_TM
@@ -318,6 +330,7 @@ header:
 	@if [ $(call parse_config,debug) ]; then echo "- Debug option requested"; fi;
 	@if [ $(call parse_config,gdb) ]; then echo "- Compilation for GDB requested"; fi;
 	@if [ $(call parse_config,picsar) ]; then echo "- SMILEI linked to PICSAR requested"; fi;
+	@if [ $(call parse_config,sfqedtoolkit) ]; then echo "- SMILEI linked to SFQEDtoolkit requested"; fi;
 	@if [ $(call parse_config,opt-report) ]; then echo "- Optimization report requested"; fi;
 	@if [ $(call parse_config,detailed_timers) ]; then echo "- Detailed timers option requested"; fi;
 	@if [ $(call parse_config,no_mpi_tm) ]; then echo "- Compiled without MPI_THREAD_MULTIPLE"; fi;

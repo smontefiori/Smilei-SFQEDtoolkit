@@ -45,7 +45,7 @@ public:
         }
         // Monte-Carlo using the SFQEDToolkit (within LCFA)
         else if( species->radiation_model_ == "sfqedtk-lcfa" ) {
-            Radiate = new RadiationMonteCarlo( params, species, rand  );
+            Radiate = new RadiationMonteCarloSFQEDtoolkit( params, species, rand  );
         }
         // Monte-Carlo using the SFQEDToolkit (beyond LCFA)
         else if( species->radiation_model_ == "sfqedtk-bydlcfa" ) {

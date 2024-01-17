@@ -24,6 +24,10 @@
 #include <openacc.h>
 #endif
 
+#ifdef SMILEI_SFQEDTOOLKIT
+#include "SFQEDtoolkit_Interface.hpp"
+#endif
+
 #include "Smilei.h"
 #include "SmileiMPI_test.h"
 #include "Params.h"
@@ -190,6 +194,13 @@ int main( int argc, char *argv[] )
         executeTestMode( vecPatches, region, &smpi, simWindow, params, checkpoint, openPMD, &radiation_tables_ );
         return 0;
     }
+
+    #ifdef SMILEI_SFQEDTOOLKIT
+    
+    TITLE("Initializing SFQEDtoolkit");
+    SFQED_INIT_ALL_ref_freq(params.reference_angular_frequency_SI, params.timestep);
+
+    #endif
 
     // ---------------------------------------------------------------------
     // Init and compute tables for radiation effects
@@ -789,6 +800,14 @@ int main( int argc, char *argv[] )
     delete simWindow;
     PyTools::closePython();
     TITLE( "END" );
+    
+    #ifdef SMILEI_SFQEDTOOLKIT
+    // ------------------------------
+    //  Cleanup SFQEDtoolkit
+    // ------------------------------
+    TITLE("Freeing SFQEDtoolkit resources");
+    SFQED_FINALIZE_ALL();
+    #endif
 
     return 0;
 
