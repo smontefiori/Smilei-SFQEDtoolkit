@@ -511,7 +511,7 @@ public:
     virtual double* getPtrDeltaPerpForce( int idim) {
         return ((std::size_t)idim < DeltaPerpForce.size()) ? DeltaPerpForce[idim].data() : nullptr;
     };
-    virtual short* getPtrJustCreated( int idim) {
+    virtual short* getPtrJustCreated() {
         return (has_to_keep_former_force) ? JustCreated.data() : nullptr;
     };
     virtual double* getPtrTau() {
