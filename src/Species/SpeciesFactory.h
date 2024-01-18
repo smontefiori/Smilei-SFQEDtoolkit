@@ -95,7 +95,8 @@ public:
                 || pusher == "higueracary" // Higuary Cary pusher
                 || pusher == "ponderomotive_boris"  // relativistic Boris pusher with a laser envelope model
                 || pusher == "borisBTIS3" // relativistic Boris pusher with B-TIS3 interpolation
-                || pusher == "ponderomotive_borisBTIS3" ){
+                || pusher == "ponderomotive_borisBTIS3"
+                || pusher == "borisby" ){
             } else {
                 ERROR_NAMELIST( "For species `" << species_name << "`, pusher must be 'boris', 'borisnr', 'vay', 'higueracary', 'ponderomotive_boris','borisBTIS3', 'ponderomotive_borisBTIS3'",
                 LINK_NAMELIST + std::string("#pusher") );

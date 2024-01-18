@@ -196,6 +196,8 @@ int main( int argc, char *argv[] )
     }
 
     #ifdef SMILEI_SFQEDTOOLKIT
+
+    cout << "ciao!" << "\n";
     
     TITLE("Initializing SFQEDtoolkit");
     SFQED_INIT_ALL_ref_freq(params.reference_angular_frequency_SI, params.timestep);
