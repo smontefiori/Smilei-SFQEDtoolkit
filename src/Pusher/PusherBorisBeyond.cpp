@@ -132,7 +132,7 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         deltaPerpF_y[ipart] = deltaPerpF_y[ipart] - 1.;
         deltaPerpF_z[ipart] = deltaPerpF_z[ipart] - 1.;
 
-        cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
+        std::cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
             << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
             << momentum_x[ipart] << " " << momentum_y[ipart] << " " << momentum_z[ipart] << "\n";
         
