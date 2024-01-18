@@ -396,12 +396,12 @@ public:
     }
 
     //! Method used to get the justCreated value
-    inline double justCreated( unsigned int ipart ) const
+    inline short justCreated( unsigned int ipart ) const
     {
         return JustCreated[ipart];
     }
     //! Method used to set a new value to the justCreated value
-    inline double &justCreated( unsigned int ipart )
+    inline short &justCreated( unsigned int ipart )
     {
         return JustCreated[ipart];
     }
