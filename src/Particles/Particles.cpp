@@ -646,7 +646,7 @@ ostream &operator << ( ostream &out, const Particles &particles )
             for( unsigned int i=0; i<3; i++ ) {
                 out << particles.DeltaPerpForce[i][iPart] << " ";
             }
-            out << JustCreated[iPart] << endl;
+            out << particles.JustCreated[iPart] << endl;
         }
 
         if( particles.has_Monte_Carlo_process ) {
