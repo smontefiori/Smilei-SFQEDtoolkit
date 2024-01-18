@@ -35,6 +35,14 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
     double *const __restrict__ momentum_y = particles.getPtrMomentum( 1 );
     double *const __restrict__ momentum_z = particles.getPtrMomentum( 2 );
 
+    double *const __restrict__ prevPerpF_x = particles.getPtrFormerPerpForce( 0 );
+    double *const __restrict__ prevPerpF_y = particles.getPtrFormerPerpForce( 1 );
+    double *const __restrict__ prevPerpF_z = particles.getPtrFormerPerpForce( 2 );
+
+    double *const __restrict__ deltaPerpF_x = particles.getPtrDeltaPerpForce( 0 );
+    double *const __restrict__ deltaPerpF_y = particles.getPtrDeltaPerpForce( 1 );
+    double *const __restrict__ deltaPerpF_z = particles.getPtrDeltaPerpForce( 2 );
+
     const short *const __restrict__ charge = particles.getPtrCharge();
 
     double *const __restrict__ invgf = &( smpi->dynamics_invgf[ithread][0] );
@@ -116,6 +124,18 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         invgf[ipart2] = local_invgf; //1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
 
         // update the quantities necessary for the BLCFA
+        prevPerpF_x[ipart] = prevPerpF_x[ipart] + 1.;
+        prevPerpF_y[ipart] = prevPerpF_y[ipart] + 1.;
+        prevPerpF_z[ipart] = prevPerpF_z[ipart] + 1.;
+
+        deltaPerpF_x[ipart] = deltaPerpF_x[ipart] - 1.;
+        deltaPerpF_y[ipart] = deltaPerpF_y[ipart] - 1.;
+        deltaPerpF_z[ipart] = deltaPerpF_z[ipart] - 1.;
+
+        cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
+            << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
+            << momentum_x[ipart] << " " << momentum_y[ipart] << " " << momentum_z[ipart] << "\n";
+        
         // double pushed_momentum[] = {pxsm, pysm, pzsm};
         // double momentum[] = {momentum_x[ipart], momentum_y[ipart], momentum_z[ipart]};
         // double Lorentz_F_Old[] = {};
