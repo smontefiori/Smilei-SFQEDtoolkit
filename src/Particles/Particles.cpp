@@ -38,6 +38,7 @@ Particles::Particles():
     Momentum.resize( 0 );
     FormerPerpForce.resize( 0 );
     DeltaPerpForce.resize( 0 );
+    JustCreated.resize( 0 );
     cell_keys.resize( 0 );
     is_test = false;
     has_quantum_parameter = false;
@@ -115,6 +116,7 @@ void Particles::initialize( unsigned int nParticles, unsigned int nDim, bool kee
                 double_prop_.push_back( &( FormerPerpForce[i] ) );
                 double_prop_.push_back( &( DeltaPerpForce[i] ) );
             }
+            short_prop_.push_back( &JustCreated );
         }
         
         if( interpolated_fields_ ) {
@@ -194,6 +196,7 @@ void Particles::reserve( unsigned int reserved_particles,
             FormerPerpForce[i].reserve( reserved_particles );
             DeltaPerpForce[i].reserve( reserved_particles );
         }
+        JustCreated.reserve( reserved_particles );
     }
 
     if( has_Monte_Carlo_process ) {
@@ -273,6 +276,7 @@ void Particles::resize( unsigned int nParticles,
             FormerPerpForce[i].resize( nParticles, 0. );
             DeltaPerpForce[i].resize( nParticles, 0. );
         }
+        JustCreated.resize( nParticles, 0. );
     }
 
     if( has_Monte_Carlo_process ) {
@@ -483,6 +487,7 @@ void Particles::makeParticleAt( Particles &source_particles, unsigned int ipart,
         DeltaPerpForce[0].push_back( 0. );
         DeltaPerpForce[1].push_back( 0. );
         DeltaPerpForce[2].push_back( 0. );
+        JustCreated.push_back( 1 );
     }
 
     if( has_Monte_Carlo_process ) {
@@ -600,6 +605,7 @@ void Particles::print( unsigned int iPart )
         for( unsigned int i=0; i<3; i++ ) {
             cout << DeltaPerpForce[i][iPart] << " ";
         }
+        cout << JustCreated[iPart] << endl;
     }
 
     if( has_Monte_Carlo_process ) {
@@ -640,6 +646,7 @@ ostream &operator << ( ostream &out, const Particles &particles )
             for( unsigned int i=0; i<3; i++ ) {
                 out << particles.DeltaPerpForce[i][iPart] << " ";
             }
+            out << JustCreated[iPart] << endl;
         }
 
         if( particles.has_Monte_Carlo_process ) {

@@ -33,6 +33,8 @@ private:
     std::vector<double>  FormerPerpForce;
     //! particle delta on former force
     std::vector<double>  DeltaPerpForce;
+    //! boolean (but actually short) value needed for BLCFA with SFQEDtoolkit
+    short JustCreated;
     //! particle optical depth for Monte-Carlo processes
     double Tau;
     //! particle charge state

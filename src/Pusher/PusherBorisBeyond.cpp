@@ -45,6 +45,8 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
 
     const short *const __restrict__ charge = particles.getPtrCharge();
 
+    short *const __restrict__ justCreated = particles.getPtrJustCreated();
+
     double *const __restrict__ invgf = &( smpi->dynamics_invgf[ithread][0] );
 
     const int nparts = particles.last_index.back(); // particles.size()
@@ -134,7 +136,8 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
 
         std::cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
             << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
-            << momentum_x[ipart] << " " << momentum_y[ipart] << " " << momentum_z[ipart] << "\n";
+            << position_x[ipart] << " " << position_y[ipart] << " " << position_z[ipart] << " "
+            << justCreated[ipart] << "\n";
         
         // double pushed_momentum[] = {pxsm, pysm, pzsm};
         // double momentum[] = {momentum_x[ipart], momentum_y[ipart], momentum_z[ipart]};
@@ -149,6 +152,10 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         //                                         delta,
         //                                         double& part_gamma,
         //                                         double& part_chi);
+
+        if(justCreated[ipart]){
+            justCreated[ipart] = false;
+        }
 
         //record the updated arrays
         momentum_x[ipart] = pxsm;

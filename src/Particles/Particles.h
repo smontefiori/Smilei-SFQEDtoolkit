@@ -395,6 +395,22 @@ public:
         return DeltaPerpForce[idim];
     }
 
+    //! Method used to get the justCreated value
+    inline double justCreated( unsigned int ipart ) const
+    {
+        return JustCreated[ipart];
+    }
+    //! Method used to set a new value to the justCreated value
+    inline double &justCreated( unsigned int ipart )
+    {
+        return JustCreated[ipart];
+    }
+    //! Method used to get the Particle justCreated value
+    inline std::vector<short> justCreated() const
+    {
+        return JustCreated;
+    }
+
     //! Method used to get the Particle optical depth
     inline double  tau( unsigned int ipart ) const
     {
@@ -495,6 +511,9 @@ public:
     virtual double* getPtrDeltaPerpForce( int idim) {
         return ((std::size_t)idim < DeltaPerpForce.size()) ? DeltaPerpForce[idim].data() : nullptr;
     };
+    virtual short* getPtrJustCreated( int idim) {
+        return (has_to_keep_former_force) ? JustCreated.data() : nullptr;
+    };
     virtual double* getPtrTau() {
         return (has_Monte_Carlo_process ? Tau.data() : nullptr);
     };
@@ -571,6 +590,9 @@ public:
 
     //! array of particle delta of former force (for SFQEDToolkit)
     std::vector< std::vector<double> > DeltaPerpForce;
+
+    //! array of boolean (but actually short) values signaling the "creation state" of a particle (for SFQEDToolkit)
+    std::vector<short> JustCreated;
 
     //! array of optical depths for the Monte-Carlo process
     std::vector<double> Tau;

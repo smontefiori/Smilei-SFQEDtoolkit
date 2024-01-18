@@ -30,6 +30,7 @@ Particle::Particle( Particles &parts, int iPart )
             FormerPerpForce[iDim] = parts.formerPerpForce( iDim, iPart );
             DeltaPerpForce[iDim] = parts.deltaPerpForce( iDim, iPart );
         }
+        JustCreated = parts.justCreated( iPart );
     }
     if( parts.Tau.size() ) {
         Tau = parts.tau( iPart );
