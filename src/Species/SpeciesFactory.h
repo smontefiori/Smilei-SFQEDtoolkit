@@ -95,8 +95,9 @@ public:
                 || pusher == "higueracary" // Higuary Cary pusher
                 || pusher == "ponderomotive_boris"  // relativistic Boris pusher with a laser envelope model
                 || pusher == "borisBTIS3" // relativistic Boris pusher with B-TIS3 interpolation
-                || pusher == "ponderomotive_borisBTIS3"
-                || pusher == "borisby" ){
+                || pusher == "ponderomotive_borisBTIS3" ){
+            } else if (pusher == "borisby") { // for the beyond LCFA pusher we need to track the previous forces
+                this_species->particles->has_to_keep_former_force = true;
             } else {
                 ERROR_NAMELIST( "For species `" << species_name << "`, pusher must be 'boris', 'borisnr', 'vay', 'higueracary', 'ponderomotive_boris','borisBTIS3', 'ponderomotive_borisBTIS3'",
                 LINK_NAMELIST + std::string("#pusher") );

@@ -48,7 +48,6 @@ Species(
 	position_initialization = pos,
 	momentum_initialization = mom,
 	pusher="borisby",
-	particles_per_cell = 1,
 	mass = 1.0,
 	charge = -1.0,
 	boundary_conditions = [
