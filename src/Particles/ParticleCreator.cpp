@@ -507,7 +507,14 @@ int ParticleCreator::create( struct SubSpace sub_space,
                     } else { // not photons
                         for( unsigned int idim=0; idim < 3; idim++ ) {
                             particles_->momentum( idim, ip ) = momentum[idim][ippy]/species_->mass_ ;
+                        #ifdef SMILEI_SFQEDTOOLKIT                              
+                            particles_->formerPerpForce( idim, ip ) = 0.0;
+                            particles_->deltaPerpForce( idim, ip ) = 0.0;
                         }
+                        particles_->justCreated( ip ) = 1;
+                        #else
+                        }
+                        #endif
                     }
                 } else {
                     double vel[3], temp[3];
@@ -823,6 +830,20 @@ void ParticleCreator::createMomentum( std::string momentum_initialization,
     // Particles
     // -------------------------------------------------------------------------
     if( species->mass_ > 0 ) {
+
+#ifdef SMILEI_SFQEDTOOLKIT
+        if(particles->has_to_keep_former_force){
+            for( unsigned int p=iPart; p<iPart+nPart; p++ ) {                                 
+                particles->formerPerpForce( 0, p ) = 0.0;
+                particles->formerPerpForce( 1, p ) = 0.0;
+                particles->formerPerpForce( 2, p ) = 0.0;
+                particles->deltaPerpForce( 0, p ) = 0.0;
+                particles->deltaPerpForce( 1, p ) = 0.0;
+                particles->deltaPerpForce( 2, p ) = 0.0;
+                particles->justCreated( p ) = 1;
+            }
+        }
+#endif
 
         // Cold distribution
         if( momentum_initialization == "cold" ) {
