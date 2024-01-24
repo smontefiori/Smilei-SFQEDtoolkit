@@ -181,7 +181,7 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         justCreated[ipart] = aux_bool;
 
         //update the quantum parameter already at this stage (it will be used in the radiation module)
-        chi[ipart] = particles.getPtrChi();
+        chi[ipart] = part_chi;
 
         //update the particle delta variable (used to compute the LCFA threshold)
         // it is -1 if the particle cannot emit
