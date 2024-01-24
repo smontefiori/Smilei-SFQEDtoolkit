@@ -116,7 +116,7 @@ Main(
     timestep = dt,
     simulation_time = Tsim,
 
-    EM_boundary_conditions = [['silver-muller'],['silver-muller']],
+    EM_boundary_conditions = [['periodic'],['periodic']],
 
     random_seed = int(round(time.time() * 1000)), #smilei_mpi_rank, #
 
