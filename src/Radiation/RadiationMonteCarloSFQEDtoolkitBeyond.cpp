@@ -85,8 +85,9 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
     std::vector<double> *Epart = &( smpi->dynamics_Epart[ithread] );
     std::vector<double> *Bpart = &( smpi->dynamics_Bpart[ithread] );
 
-    std::vector<double> *invgf = &(smpi->dynamics_invgf[ithread]);
-    std::vector<double> *deltaBLCFA = &( smpi->dynamics_deltaBLCFA[ithread] );
+    //associate the vector<double> to a double pointer
+    const double *const __restrict__ invgf = &( smpi->dynamics_invgf[ithread][0] );
+    const double *const __restrict__ deltaBLCFA = &( smpi->dynamics_deltaBLCFA[ithread][0] );
 
     // Total number of particles
     const int nparts = smpi->getBufferSize(ithread);
