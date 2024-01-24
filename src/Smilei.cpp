@@ -196,13 +196,11 @@ int main( int argc, char *argv[] )
     }
 
     #ifdef SMILEI_SFQEDTOOLKIT
-
-    cout << "ciao!" << "\n";
     
     TITLE("Initializing SFQEDtoolkit");
     SFQED_INIT_ALL_ref_freq(params.reference_angular_frequency_SI, params.timestep);
 
-    #endif
+    #else
 
     // ---------------------------------------------------------------------
     // Init and compute tables for radiation effects
@@ -214,6 +212,8 @@ int main( int argc, char *argv[] )
     // Init and compute tables for multiphoton Breit-Wheeler pair creation
     // ---------------------------------------------------------------------
     multiphoton_Breit_Wheeler_tables_.initialization( params, &smpi );
+
+    #endif
 
     // reading from dumped file the restart values
     if( params.restart ) {

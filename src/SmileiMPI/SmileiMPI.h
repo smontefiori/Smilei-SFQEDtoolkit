@@ -215,6 +215,12 @@ public:
     std::vector<std::vector<double>> dynamics_Bpart;
     //! gamma factor
     std::vector<std::vector<double>> dynamics_invgf;
+
+    #ifdef SMILEI_SFQEDTOOLKIT
+    //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+    std::vector<std::vector<double>> dynamics_deltaBLCFA;
+    #endif
+
     //! iold_pos
     std::vector<std::vector<int>> dynamics_iold;
     //! delta_old_pos
@@ -274,6 +280,10 @@ public:
         dynamics_Epart[ithread].resize( 3*npart );
         dynamics_Bpart[ithread].resize( 3*npart );
         dynamics_invgf[ithread].resize( npart );
+        #ifdef SMILEI_SFQEDTOOLKIT
+        //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+        dynamics_deltaBLCFA[ithread].resize( npart );
+        #endif
         dynamics_iold[ithread].resize( ndim_field*npart );
         dynamics_deltaold[ithread].resize( ndim_field*npart );
         if(use_BTIS3){
@@ -304,6 +314,10 @@ public:
         dynamics_Epart.resize( n_buffers );
         dynamics_Bpart.resize( n_buffers );
         dynamics_invgf.resize( n_buffers );
+        #ifdef SMILEI_SFQEDTOOLKIT
+        //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+        dynamics_deltaBLCFA.resize( n_buffers );
+        #endif
         dynamics_iold.resize( n_buffers );
         dynamics_deltaold.resize( n_buffers );
         if(use_BTIS3){
@@ -333,6 +347,10 @@ public:
         dynamics_Epart[buffer_id].resize( 1 );
         dynamics_Bpart[buffer_id].resize( 1 );
         dynamics_invgf[buffer_id].resize( 1 );
+        #ifdef SMILEI_SFQEDTOOLKIT
+        //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+        dynamics_deltaBLCFA[buffer_id].resize( 1 );
+        #endif
         dynamics_iold[buffer_id].resize( 1 );
         dynamics_deltaold[buffer_id].resize( 1 );
         if(use_BTIS3){

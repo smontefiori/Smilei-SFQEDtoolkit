@@ -115,6 +115,10 @@ void SmileiMPI_test::init( Params &params, DomainDecomposition *domain_decomposi
     dynamics_Epart.resize( 1 );
     dynamics_Bpart.resize( 1 );
     dynamics_invgf.resize( 1 );
+    #ifdef SMILEI_SFQEDTOOLKIT
+    //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+    dynamics_deltaBLCFA.resize( 1 );
+    #endif
     dynamics_iold.resize( 1 );
     dynamics_deltaold.resize( 1 );
 

@@ -47,7 +47,11 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
 
     short *const __restrict__ justCreated = particles.getPtrJustCreated();
 
+    double *const __restrict__ chi = particles.getPtrChi();
+
     double *const __restrict__ invgf = &( smpi->dynamics_invgf[ithread][0] );
+
+    double *const __restrict__ deltaBLCFA = &( smpi->dynamics_deltaBLCFA[ithread][0] );
 
     const int nparts = particles.last_index.back(); // particles.size()
 
@@ -122,44 +126,72 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         pzsm += ( 2.0*( Tz*Tx+Ty )* umx  +      2.0*( Ty*Tz-Tx )* umy  + ( 1.0-Tx*Tx-Ty*Ty+Tz*Tz )* umz )*inv_det_T;
 
         // finalize Half-acceleration in the electric field
-        local_invgf = 1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
-        invgf[ipart2] = local_invgf; //1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
+        // local_invgf = 1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
+        // invgf[ipart2] = local_invgf; //1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
 
         // update the quantities necessary for the BLCFA
-        prevPerpF_x[ipart] = prevPerpF_x[ipart] + 1.;
-        prevPerpF_y[ipart] = prevPerpF_y[ipart] + 1.;
-        prevPerpF_z[ipart] = prevPerpF_z[ipart] + 1.;
 
-        deltaPerpF_x[ipart] = deltaPerpF_x[ipart] - 1.;
-        deltaPerpF_y[ipart] = deltaPerpF_y[ipart] - 1.;
-        deltaPerpF_z[ipart] = deltaPerpF_z[ipart] - 1.;
+        //debug
+        //***************************************************
+        // prevPerpF_x[ipart] = prevPerpF_x[ipart] + 1.;
+        // prevPerpF_y[ipart] = prevPerpF_y[ipart] + 1.;
+        // prevPerpF_z[ipart] = prevPerpF_z[ipart] + 1.;
 
-        std::cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
-            << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
-            << position_x[ipart] << " " << justCreated[ipart] << "\n";
+        // deltaPerpF_x[ipart] = deltaPerpF_x[ipart] - 1.;
+        // deltaPerpF_y[ipart] = deltaPerpF_y[ipart] - 1.;
+        // deltaPerpF_z[ipart] = deltaPerpF_z[ipart] - 1.;
+
+        // std::cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
+        //     << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
+        //     << position_x[ipart] << " " << justCreated[ipart] << "\n";
+
+        // if(justCreated[ipart]){
+        //     justCreated[ipart] = false;
+        // }
         
-        // double pushed_momentum[] = {pxsm, pysm, pzsm};
-        // double momentum[] = {momentum_x[ipart], momentum_y[ipart], momentum_z[ipart]};
-        // double Lorentz_F_Old[] = {};
-        // double Delta_Lorentz_F_Old[] = {};
-        // double delta = ;
-        // bool can_emit = SFQED_BLCFA_OBJECT_update_raw(pushed_momentum,
-        //                                         const momentum,
-        //                                         Lorentz_F_Old,
-        //                                         Delta_Lorentz_F_Old,
-        //                                         bool& just_created,
-        //                                         delta,
-        //                                         double& part_gamma,
-        //                                         double& part_chi);
+        //***************************************************
 
-        if(justCreated[ipart]){
-            justCreated[ipart] = false;
-        }
+        double pushed_momentum[] = {pxsm, pysm, pzsm};
+        double momentum[] = {momentum_x[ipart], momentum_y[ipart], momentum_z[ipart]};
+        double Lorentz_F_Old[] = {prevPerpF_x[ipart], prevPerpF_y[ipart], prevPerpF_z[ipart]};
+        double Delta_Lorentz_F_Old[] = {deltaPerpF_x[ipart], deltaPerpF_y[ipart], deltaPerpF_z[ipart]};
+        bool aux_bool = justCreated[ipart];
+        double delta, part_gamma, part_chi;
+        bool can_emit = SFQED_BLCFA_OBJECT_update_raw(pushed_momentum,
+                                                momentum,
+                                                Lorentz_F_Old,
+                                                Delta_Lorentz_F_Old,
+                                                aux_bool,
+                                                delta, part_gamma, part_chi);
 
-        //record the updated arrays
+        //update momentum
         momentum_x[ipart] = pxsm;
         momentum_y[ipart] = pysm;
         momentum_z[ipart] = pzsm;
+
+        //update new particle's props (Force, Delta Force and boolean)
+        prevPerpF_x[ipart] = Lorentz_F_Old[0];
+        prevPerpF_y[ipart] = Lorentz_F_Old[1];
+        prevPerpF_z[ipart] = Lorentz_F_Old[2];
+
+        deltaPerpF_x[ipart] = Delta_Lorentz_F_Old[0];
+        deltaPerpF_y[ipart] = Delta_Lorentz_F_Old[1];
+        deltaPerpF_z[ipart] = Delta_Lorentz_F_Old[2];
+
+        justCreated[ipart] = aux_bool;
+
+        //update the quantum parameter already at this stage (it will be used in the radiation module)
+        chi[ipart] = particles.getPtrChi();
+
+        //update the particle delta variable (used to compute the LCFA threshold)
+        // it is -1 if the particle cannot emit
+        deltaBLCFA[ipart2] = can_emit ? delta : - 1.;
+
+        //the local_invgf is used to push the particle
+        local_invgf = 1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
+
+        //update the vectorization array with the inverse gamma factor of the mid step momentum
+        invgf[ipart2] = 1. / part_gamma;
 
         // Move the particle
         local_invgf *= dt;

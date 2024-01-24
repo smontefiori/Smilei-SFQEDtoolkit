@@ -23,6 +23,8 @@ Particle::Particle( Particles &parts, int iPart )
     if( parts.Chi.size() ) {
         Chi = parts.chi( iPart );
     }
+
+    #ifdef SMILEI_SFQEDTOOLKIT
     if( parts.FormerPerpForce.size() ){
         FormerPerpForce.resize( 3 );
         DeltaPerpForce.resize( 3 );
@@ -32,6 +34,8 @@ Particle::Particle( Particles &parts, int iPart )
         }
         JustCreated = parts.justCreated( iPart );
     }
+    #endif
+
     if( parts.Tau.size() ) {
         Tau = parts.tau( iPart );
     }
@@ -61,12 +65,16 @@ ostream &operator << ( ostream &out, const Particle &particle )
     if( 0 ) {
         out << particle.Chi << " " ;
     }
+    
+    #ifdef SMILEI_SFQEDTOOLKIT
     if( 0 ) {
         for( unsigned int i=0; i<3; i++ ) {
             out << particle.FormerPerpForce[i] << " ";
             out << particle.DeltaPerpForce[i] << " ";
         }
     }
+    #endif
+
     if( 0 ) {
         out << particle.Tau << " " ;
     }

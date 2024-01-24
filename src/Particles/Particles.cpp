@@ -36,9 +36,13 @@ Particles::Particles():
     Position.resize( 0 );
     Position_old.resize( 0 );
     Momentum.resize( 0 );
+    
+    #ifdef SMILEI_SFQEDTOOLKIT
     FormerPerpForce.resize( 0 );
     DeltaPerpForce.resize( 0 );
     JustCreated.resize( 0 );
+    #endif
+    
     cell_keys.resize( 0 );
     is_test = false;
     has_quantum_parameter = false;
@@ -109,6 +113,7 @@ void Particles::initialize( unsigned int nParticles, unsigned int nDim, bool kee
             double_prop_.push_back( &Tau );
         }
 
+        #ifdef SMILEI_SFQEDTOOLKIT
         // Saves former Lorentz force and delta of the force
         // used by the SFQEDToolkit to compute beyond the LCFA radiation
         if( has_to_keep_former_force ) {
@@ -118,6 +123,7 @@ void Particles::initialize( unsigned int nParticles, unsigned int nDim, bool kee
             }
             short_prop_.push_back( &JustCreated );
         }
+        #endif
         
         if( interpolated_fields_ ) {
             for( size_t i = 0; i < interpolated_fields_->mode_.size(); i++ ) {
@@ -189,6 +195,7 @@ void Particles::reserve( unsigned int reserved_particles,
         Chi.reserve( reserved_particles );
     }
 
+    #ifdef SMILEI_SFQEDTOOLKIT
     if( has_to_keep_former_force ) {
         FormerPerpForce.resize( 3 ) ;
         DeltaPerpForce.resize( 3 );
@@ -198,6 +205,7 @@ void Particles::reserve( unsigned int reserved_particles,
         }
         JustCreated.reserve( reserved_particles );
     }
+    #endif
 
     if( has_Monte_Carlo_process ) {
         Tau.reserve( reserved_particles );
@@ -269,6 +277,7 @@ void Particles::resize( unsigned int nParticles,
         Chi.resize( nParticles, 0. );
     }
 
+    #ifdef SMILEI_SFQEDTOOLKIT
     if( has_to_keep_former_force ) {
         FormerPerpForce.resize( 3 ) ;
         DeltaPerpForce.resize( 3 );
@@ -278,6 +287,7 @@ void Particles::resize( unsigned int nParticles,
         }
         JustCreated.resize( nParticles, 0. );
     }
+    #endif
 
     if( has_Monte_Carlo_process ) {
         Tau.resize( nParticles, 0. );
@@ -480,6 +490,7 @@ void Particles::makeParticleAt( Particles &source_particles, unsigned int ipart,
         Chi.push_back( 0. );
     }
 
+    #ifdef SMILEI_SFQEDTOOLKIT
     if( has_to_keep_former_force ) {
         FormerPerpForce[0].push_back( 0. );
         FormerPerpForce[1].push_back( 0. );
@@ -489,6 +500,7 @@ void Particles::makeParticleAt( Particles &source_particles, unsigned int ipart,
         DeltaPerpForce[2].push_back( 0. );
         JustCreated.push_back( 1 );
     }
+    #endif
 
     if( has_Monte_Carlo_process ) {
         Tau.push_back( 0. );
@@ -598,6 +610,7 @@ void Particles::print( unsigned int iPart )
         cout << Chi[iPart] << endl;
     }
 
+    #ifdef SMILEI_SFQEDTOOLKIT
     if( has_to_keep_former_force) {
         for( unsigned int i=0; i<3; i++ ) {
             cout << FormerPerpForce[i][iPart] << " ";
@@ -607,6 +620,7 @@ void Particles::print( unsigned int iPart )
         }
         cout << JustCreated[iPart] << endl;
     }
+    #endif
 
     if( has_Monte_Carlo_process ) {
         cout << Tau[iPart] << endl;
@@ -639,6 +653,7 @@ ostream &operator << ( ostream &out, const Particles &particles )
             out << particles.Chi[iPart] << endl;
         }
 
+        #ifdef SMILEI_SFQEDTOOLKIT
         if( particles.has_to_keep_former_force) {
             for( unsigned int i=0; i<3; i++ ) {
                 out << particles.FormerPerpForce[i][iPart] << " ";
@@ -648,6 +663,7 @@ ostream &operator << ( ostream &out, const Particles &particles )
             }
             out << particles.JustCreated[iPart] << endl;
         }
+        #endif
 
         if( particles.has_Monte_Carlo_process ) {
             out << particles.Tau[iPart] << endl;

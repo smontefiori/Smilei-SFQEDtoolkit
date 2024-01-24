@@ -363,6 +363,7 @@ public:
         return Chi;
     }
 
+    #ifdef SMILEI_SFQEDTOOLKIT
     //! Method used to get the Particle former perpendicular force
     inline double  formerPerpForce( unsigned int idim, unsigned int ipart ) const
     {
@@ -410,6 +411,7 @@ public:
     {
         return JustCreated;
     }
+    #endif
 
     //! Method used to get the Particle optical depth
     inline double  tau( unsigned int ipart ) const
@@ -505,6 +507,8 @@ public:
     virtual uint64_t* getPtrId() {
         return &(Id[0]);
     };
+    
+    #ifdef SMILEI_SFQEDTOOLKIT
     virtual double* getPtrFormerPerpForce( int idim) {
         return ((std::size_t)idim < FormerPerpForce.size()) ? FormerPerpForce[idim].data() : nullptr;
     };
@@ -514,6 +518,8 @@ public:
     virtual short* getPtrJustCreated() {
         return (has_to_keep_former_force) ? JustCreated.data() : nullptr;
     };
+    #endif
+
     virtual double* getPtrTau() {
         return (has_Monte_Carlo_process ? Tau.data() : nullptr);
     };
@@ -585,6 +591,7 @@ public:
     //! array of particle quantum parameters
     std::vector<double> Chi;
 
+    #ifdef SMILEI_SFQEDTOOLKIT
     //! array of particle former force (for SFQEDToolkit)
     std::vector< std::vector<double> > FormerPerpForce;
 
@@ -593,6 +600,7 @@ public:
 
     //! array of boolean (but actually short) values signaling the "creation state" of a particle (for SFQEDToolkit)
     std::vector<short> JustCreated;
+    #endif
 
     //! array of optical depths for the Monte-Carlo process
     std::vector<double> Tau;

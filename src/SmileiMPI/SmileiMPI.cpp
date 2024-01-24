@@ -155,6 +155,10 @@ void SmileiMPI::init( Params &params, DomainDecomposition *domain_decomposition 
     dynamics_Epart.resize( omp_get_max_threads() );
     dynamics_Bpart.resize( omp_get_max_threads() );
     dynamics_invgf.resize( omp_get_max_threads() );
+    #ifdef SMILEI_SFQEDTOOLKIT
+    //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+    dynamics_deltaBLCFA.resize( omp_get_max_threads() );
+    #endif
     dynamics_iold.resize( omp_get_max_threads() );
     dynamics_deltaold.resize( omp_get_max_threads() );
     if (use_BTIS3){
@@ -183,6 +187,10 @@ void SmileiMPI::init( Params &params, DomainDecomposition *domain_decomposition 
     dynamics_Epart.resize( 1 );
     dynamics_Bpart.resize( 1 );
     dynamics_invgf.resize( 1 );
+    #ifdef SMILEI_SFQEDTOOLKIT
+    //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+    dynamics_deltaBLCFA.resize( 1 );
+    #endif
     dynamics_iold.resize( 1 );
     dynamics_deltaold.resize( 1 );
     if (use_BTIS3){
@@ -2485,9 +2493,15 @@ void SmileiMPI::eraseBufferParticleTrail( const int ndim, const int istart, cons
         dynamics_Bpart[ithread].erase(dynamics_Bpart[ithread].begin()+idim*np + istart,
                                       dynamics_Bpart[ithread].begin()+idim*np + np);
     }
+
+    #ifdef SMILEI_SFQEDTOOLKIT
+    dynamics_deltaBLCFA[ithread].erase(dynamics_deltaBLCFA[ithread].begin() + istart,
+                                  dynamics_deltaBLCFA[ithread].begin() + np);
+    #endif
+    
     dynamics_invgf[ithread].erase(dynamics_invgf[ithread].begin() + istart,
                                   dynamics_invgf[ithread].begin() + np);
-    
+
     for ( int idim=ndim-1 ; idim>=0 ; idim-- ) {
         dynamics_iold[ithread].erase(dynamics_iold[ithread].begin()+idim*np + istart,
                                       dynamics_iold[ithread].begin()+idim*np + np);
@@ -2581,6 +2595,10 @@ void SmileiMPI::resizeDeviceBuffers( unsigned int ithread,
         TryFreeDeviceCapacity( dynamics_Epart[ithread] );
         TryFreeDeviceCapacity( dynamics_Bpart[ithread] );
         TryFreeDeviceCapacity( dynamics_invgf[ithread] );
+        #ifdef SMILEI_SFQEDTOOLKIT
+        //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+        TryFreeDeviceCapacity( dynamics_deltaBLCFA[ithread] );
+        #endif
         TryFreeDeviceCapacity( dynamics_iold[ithread] );
         TryFreeDeviceCapacity( dynamics_deltaold[ithread] );
 
@@ -2589,6 +2607,10 @@ void SmileiMPI::resizeDeviceBuffers( unsigned int ithread,
         dynamics_Epart[ithread].reserve( new_particle_capacity * 3 );
         dynamics_Bpart[ithread].reserve( new_particle_capacity * 3 );
         dynamics_invgf[ithread].reserve( new_particle_capacity * 1 );
+        #ifdef SMILEI_SFQEDTOOLKIT
+        //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+        dynamics_deltaBLCFA[ithread].reserve( new_particle_capacity * 1 );
+        #endif
         dynamics_iold[ithread].reserve( new_particle_capacity * ndim_field );
         dynamics_deltaold[ithread].reserve( new_particle_capacity * ndim_field );
     }
@@ -2600,6 +2622,10 @@ void SmileiMPI::resizeDeviceBuffers( unsigned int ithread,
         dynamics_Epart[ithread].resize( particle_count * 3 );
         dynamics_Bpart[ithread].resize( particle_count * 3 );
         dynamics_invgf[ithread].resize( particle_count * 1 );
+        #ifdef SMILEI_SFQEDTOOLKIT
+        //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+        dynamics_deltaBLCFA[ithread].resize( particle_count * 1 );
+        #endif
         dynamics_iold[ithread].resize( particle_count * ndim_field );
         dynamics_deltaold[ithread].resize( particle_count * ndim_field );
     } else {
@@ -2615,6 +2641,10 @@ void SmileiMPI::resizeDeviceBuffers( unsigned int ithread,
         smilei::tools::gpu::HostDeviceMemoryManagement::DeviceAllocate( dynamics_Epart[ithread].data(), dynamics_Epart[ithread].capacity() );
         smilei::tools::gpu::HostDeviceMemoryManagement::DeviceAllocate( dynamics_Bpart[ithread].data(), dynamics_Bpart[ithread].capacity() );
         smilei::tools::gpu::HostDeviceMemoryManagement::DeviceAllocate( dynamics_invgf[ithread].data(), dynamics_invgf[ithread].capacity() );
+        #ifdef SMILEI_SFQEDTOOLKIT
+        //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+        smilei::tools::gpu::HostDeviceMemoryManagement::DeviceAllocate( dynamics_deltaBLCFA[ithread].data(), dynamics_deltaBLCFA[ithread].capacity() );
+        #endif
         smilei::tools::gpu::HostDeviceMemoryManagement::DeviceAllocate( dynamics_iold[ithread].data(), dynamics_iold[ithread].capacity() );
         smilei::tools::gpu::HostDeviceMemoryManagement::DeviceAllocate( dynamics_deltaold[ithread].data(), dynamics_deltaold[ithread].capacity() );
     }
@@ -2625,6 +2655,10 @@ void SmileiMPI::resizeDeviceBuffers( unsigned int ithread,
     SMILEI_GPU_ASSERT_MEMORY_IS_ON_DEVICE( dynamics_Epart[ithread].data() );
     SMILEI_GPU_ASSERT_MEMORY_IS_ON_DEVICE( dynamics_Bpart[ithread].data() );
     SMILEI_GPU_ASSERT_MEMORY_IS_ON_DEVICE( dynamics_invgf[ithread].data() );
+    #ifdef SMILEI_SFQEDTOOLKIT
+    //! value of the delta value computed in the BLCFA pusher (PusherBorisBeyond)
+    SMILEI_GPU_ASSERT_MEMORY_IS_ON_DEVICE( dynamics_deltaBLCFA[ithread].data() );
+    #endif
     SMILEI_GPU_ASSERT_MEMORY_IS_ON_DEVICE( dynamics_iold[ithread].data() );
     SMILEI_GPU_ASSERT_MEMORY_IS_ON_DEVICE( dynamics_deltaold[ithread].data() );
 }

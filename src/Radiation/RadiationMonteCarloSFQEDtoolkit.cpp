@@ -498,9 +498,9 @@ void RadiationMonteCarloSFQEDtoolkit::operator()(
                         nphotons += radiation_photon_sampling_;
 
                         // Inverse of the momentum norm
-                        inv_old_norm_p = 1./std::sqrt( momentum_x[ipart]*momentum_x[ipart]
-                                                  + momentum_y[ipart]*momentum_y[ipart]
-                                                  + momentum_z[ipart]*momentum_z[ipart] );
+                        // inv_old_norm_p = 1./std::sqrt( momentum_x[ipart]*momentum_x[ipart]
+                        //                           + momentum_y[ipart]*momentum_y[ipart]
+                        //                           + momentum_z[ipart]*momentum_z[ipart] );
 
                         // For all new photons
                         #pragma omp simd
@@ -523,12 +523,25 @@ void RadiationMonteCarloSFQEDtoolkit::operator()(
                                 }
                             }
 
+                            //[SFQEDtoolkit]
+                            //***********************************************
                             photon_momentum_x[iphoton] =
-                                photon_gamma*momentum_x[ipart]*inv_old_norm_p;
+                                phtn_mom_x;
                             photon_momentum_y[iphoton] =
-                                photon_gamma*momentum_y[ipart]*inv_old_norm_p;
+                                phtn_mom_y;
                             photon_momentum_z[iphoton] =
-                                photon_gamma*momentum_z[ipart]*inv_old_norm_p;
+                                phtn_mom_z;
+                            //***********************************************
+
+                            //[classic Smilei]
+                            //***********************************************
+                            // photon_momentum_x[iphoton] =
+                            //     photon_gamma*momentum_x[ipart]*inv_old_norm_p;
+                            // photon_momentum_y[iphoton] =
+                            //     photon_gamma*momentum_y[ipart]*inv_old_norm_p;
+                            // photon_momentum_z[iphoton] =
+                            //     photon_gamma*momentum_z[ipart]*inv_old_norm_p;
+                            //***********************************************
 
                             photon_weight[iphoton] = weight[ipart]*inv_radiation_photon_sampling_;
                             photon_charge[iphoton] = 0;
@@ -553,9 +566,9 @@ void RadiationMonteCarloSFQEDtoolkit::operator()(
 #else
 
                         // Inverse of the momentum norm
-                        inv_old_norm_p = 1./std::sqrt( momentum_x[ipart]*momentum_x[ipart]
-                                                  + momentum_y[ipart]*momentum_y[ipart]
-                                                  + momentum_z[ipart]*momentum_z[ipart] );
+                        // inv_old_norm_p = 1./std::sqrt( momentum_x[ipart]*momentum_x[ipart]
+                        //                           + momentum_y[ipart]*momentum_y[ipart]
+                        //                           + momentum_z[ipart]*momentum_z[ipart] );
 
                         const int iphoton_start = nphotons_start // initial number of photons
                                   + (ipart - istart) * photon_buffer_size_per_particle // beginning of the buffer for ipart
@@ -574,13 +587,25 @@ void RadiationMonteCarloSFQEDtoolkit::operator()(
                                 }
                             }
                             
-                            // Photon momentum
-                            photon_momentum_x[iphoton_start + iphoton] =
-                                photon_gamma*momentum_x[ipart]*inv_old_norm_p;
-                            photon_momentum_y[iphoton_start + iphoton] =
-                                photon_gamma*momentum_y[ipart]*inv_old_norm_p;
-                            photon_momentum_z[iphoton_start + iphoton] =
-                                photon_gamma*momentum_z[ipart]*inv_old_norm_p;
+                            //[SFQEDtoolkit]
+                            //***********************************************
+                            photon_momentum_x[iphoton] =
+                                phtn_mom_x;
+                            photon_momentum_y[iphoton] =
+                                phtn_mom_y;
+                            photon_momentum_z[iphoton] =
+                                phtn_mom_z;
+                            //***********************************************
+
+                            //[classic Smilei]
+                            //***********************************************
+                            // photon_momentum_x[iphoton] =
+                            //     photon_gamma*momentum_x[ipart]*inv_old_norm_p;
+                            // photon_momentum_y[iphoton] =
+                            //     photon_gamma*momentum_y[ipart]*inv_old_norm_p;
+                            // photon_momentum_z[iphoton] =
+                            //     photon_gamma*momentum_z[ipart]*inv_old_norm_p;
+                            //***********************************************
                                 
                             photon_weight[iphoton_start + iphoton] = weight[ipart]*inv_radiation_photon_sampling_;
                             photon_charge[iphoton_start + iphoton] = 0;
