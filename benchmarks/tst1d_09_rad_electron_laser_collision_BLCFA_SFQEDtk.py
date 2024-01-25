@@ -140,11 +140,22 @@ for i,radiation in enumerate(radiation_list):
         temperature = [0.],
         pusher = pusher,
         radiation_model = radiation,
-        boundary_conditions = [
-            ["remove", "remove"],
-        ],
+        boundary_conditions = [["remove", "remove"]],
+        radiation_photon_species = "synchro_photon",
     )
 
+
+#   The mc synchrotron photon emitted will be stored here.
+Species(
+  name = "synchro_photon",
+  position_initialization = "random",
+  momentum_initialization = "cold",
+  particles_per_cell = 0,
+  mass = 0.0,
+  charge = 0.0,
+  number_density = 0.0,
+  boundary_conditions = [["remove", "remove"]], #[["remove", "remove"],["remove", "remove"]],
+)
 # ----------------------------------------------------------------------------------------
 # Radiation parameters
 
