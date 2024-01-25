@@ -62,7 +62,7 @@ gamma = 9784.7 #1000./0.511             # Electron bunch initial energy
 v = math.sqrt(1 - 1./gamma**2)          # electron bunch initial velocity
 
 pusher = "borisby"                         # type of pusher
-radiation_list = ["sfqedtk-bylcfa"] # List of radiation models
+radiation_list = ["sfqedtk-bydlcfa"] # List of radiation models
 species_name_list = ["MC"]            # Name of the species
 
 datetime = datetime.datetime.now()
