@@ -188,6 +188,7 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         deltaBLCFA[ipart2] = can_emit ? delta : - 1.;
 
         //the local_invgf is used to push the particle
+        std::cout << local_invgf << ' ' << dt << ' ' << std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm ) << "\n";
         local_invgf = dt / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
 
         //update the vectorization array with the inverse gamma factor of the mid step momentum
