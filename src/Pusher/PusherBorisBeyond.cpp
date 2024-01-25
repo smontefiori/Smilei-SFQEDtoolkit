@@ -164,7 +164,7 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
                                                 aux_bool,
                                                 delta, part_gamma, part_chi);
 
-        std::cout << Lorentz_F_Old[0] << ' ' << Delta_Lorentz_F_Old[0] << "\n" << std::flush;
+        std::cout << justCreated[ipart] << ' ' << aux_bool << ' ' << Lorentz_F_Old[0] << ' ' << Delta_Lorentz_F_Old[0] << "\n" << std::flush;
 
         //update momentum
         momentum_x[ipart] = pxsm;
