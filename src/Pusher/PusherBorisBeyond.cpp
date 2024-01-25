@@ -180,7 +180,7 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         deltaPerpF_y[ipart] = Delta_Lorentz_F_Old[1];
         deltaPerpF_z[ipart] = Delta_Lorentz_F_Old[2];
 
-        justCreated[ipart] = aux_bool;
+        //justCreated[ipart] = aux_bool;
 
         //update the quantum parameter already at this stage (it will be used in the radiation module)
         chi[ipart] = part_chi;
