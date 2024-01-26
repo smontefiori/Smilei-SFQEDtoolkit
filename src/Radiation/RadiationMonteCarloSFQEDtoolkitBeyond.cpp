@@ -450,7 +450,7 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
                                                         Bx[ipart-ipart_ref], By[ipart-ipart_ref], Bz[ipart-ipart_ref]
                                                         );
             
-            //recoil the emitting partile
+            //recoil the emitting particle
             momentum_x[ipart] -= phtn_mom_x;
             momentum_y[ipart] -= phtn_mom_y;
             momentum_z[ipart] -= phtn_mom_z;
