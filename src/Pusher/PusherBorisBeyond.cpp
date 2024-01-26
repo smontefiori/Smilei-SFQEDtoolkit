@@ -185,13 +185,12 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
 
         std::cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
             << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
-            << position_x[ipart] << " " << justCreated[ipart] << "\n" << std::flush;
-
-        if(justCreated[ipart]){
-            justCreated[ipart] = false;
-        }
+            << position_x[ipart] << " " << justCreated[ipart] << " " << part_chi << " " << part_gamma << "\n" << std::flush;
 
         justCreated[ipart] = aux_bool;
+
+        // //update the quantum parameter already at this stage (it will be used in the radiation module)
+        chi[ipart] = part_chi;
 
         //update momentum
         momentum_x[ipart] = pxsm;
@@ -201,6 +200,17 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         local_invgf = 1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
         invgf[ipart2] = local_invgf; //1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
         local_invgf *= dt;
+
+        // //update the particle delta variable (used to compute the LCFA threshold)
+        // // it is -1 if the particle cannot emit
+        // deltaBLCFA[ipart2] = can_emit ? delta : - 1.;
+
+        // //update the vectorization array with the inverse gamma factor of the mid step momentum
+        // invgf[ipart2] = 1. / part_gamma;
+
+        // //the local_invgf is used to push the particle
+        // // std::cout << local_invgf << ' ' << dt << ' ' << std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm ) << "\n" << std::flush;
+        // local_invgf = dt / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
         
         //***************************************************
         //actual BLCFA part
