@@ -99,6 +99,7 @@ public:
             } else if (pusher == "borisby") { // for the beyond LCFA pusher we need to track the previous forces
                 #ifdef SMILEI_SFQEDTOOLKIT 
                 this_species->particles->has_to_keep_former_force = true;
+                this_species->particles->has_quantum_parameter = true;
                 #else
                 ERROR_NAMELIST( "Compile Smilei with 'make config=sfqedtoolkit' if you want to use the 'borisby' pusher!",
                 #endif
