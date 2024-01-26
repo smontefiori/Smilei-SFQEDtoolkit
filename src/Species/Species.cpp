@@ -2333,6 +2333,13 @@ void Species::compress(SmileiMPI *smpi, int ithread, bool compute_cell_keys) {
                     if( particles->has_quantum_parameter ) {
                         chi[ipart_l] = chi[ipart_r];
                     }
+
+                    // #ifdef SMILEI_SFQEDTOOLKIT
+                    // if( particles->has_to_keep_former_force ) {
+                        
+                    // }
+                    // #endif
+                    
                     if( particles->has_Monte_Carlo_process ) {
                         tau[ipart_l] = tau[ipart_r];
                     }

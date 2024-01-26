@@ -507,12 +507,14 @@ int ParticleCreator::create( struct SubSpace sub_space,
                     } else { // not photons
                         for( unsigned int idim=0; idim < 3; idim++ ) {
                             particles_->momentum( idim, ip ) = momentum[idim][ippy]/species_->mass_ ;
-                        #ifdef SMILEI_SFQEDTOOLKIT                              
-                            particles_->formerPerpForce( idim, ip ) = 0.0;
-                            particles_->deltaPerpForce( idim, ip ) = 0.0;
                         }
-                        particles_->justCreated( ip ) = 1;
-                        #else
+                        #ifdef SMILEI_SFQEDTOOLKIT
+                        if (particles_->has_to_keep_former_force){
+                            for( unsigned int idim=0; idim < 3; idim++ ) {        
+                                particles_->formerPerpForce( idim, ip ) = 0.0;
+                                particles_->deltaPerpForce( idim, ip ) = 0.0;
+                            }
+                            particles_->justCreated( ip ) = 1;
                         }
                         #endif
                     }

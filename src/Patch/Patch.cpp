@@ -678,6 +678,8 @@ void Patch::endNbrOfParticles( int ispec, int iDim )
         if( neighbor_[iDim][( iNeighbor+1 )%2]!=MPI_PROC_NULL ) {
             if( is_a_MPI_neighbor( iDim, ( iNeighbor+1 )%2 ) )  {
                 MPI_Wait( &( vecSpecies[ispec]->MPI_buffer_.rrequest[iDim][( iNeighbor+1 )%2] ), &( rstat[( iNeighbor+1 )%2] ) );
+                //debug
+                cout << " sono qui prima di tutti\n";
                 if( vecSpecies[ispec]->MPI_buffer_.part_index_recv_sz[iDim][( iNeighbor+1 )%2]!=0 ) {
                     //If I receive particles over MPI, I initialize my receive buffer with the appropriate size.
                     vecSpecies[ispec]->MPI_buffer_.partRecv[iDim][( iNeighbor+1 )%2].initialize( vecSpecies[ispec]->MPI_buffer_.part_index_recv_sz[iDim][( iNeighbor+1 )%2], cuParticles );

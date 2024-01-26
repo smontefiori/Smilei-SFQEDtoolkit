@@ -1104,6 +1104,9 @@ public:
         new_species->particles->is_test                 = species->particles->is_test;
         new_species->particles->tracked                 = species->particles->tracked;
         new_species->particles->has_quantum_parameter   = species->particles->has_quantum_parameter;
+        #ifdef SMILEI_SFQEDTOOLKIT
+        new_species->particles->has_to_keep_former_force   = species->particles->has_to_keep_former_force;
+        #endif
         new_species->particles->has_Monte_Carlo_process = species->particles->has_Monte_Carlo_process;
 
         if( species->particles->interpolated_fields_ ) {

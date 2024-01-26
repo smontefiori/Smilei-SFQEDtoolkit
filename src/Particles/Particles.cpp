@@ -117,6 +117,8 @@ void Particles::initialize( unsigned int nParticles, unsigned int nDim, bool kee
         // Saves former Lorentz force and delta of the force
         // used by the SFQEDToolkit to compute beyond the LCFA radiation
         if( has_to_keep_former_force ) {
+            //debug
+            cout << " sono qui 2\n";
             for( unsigned int i = 0; i < 3; i++ ) {
                 double_prop_.push_back( &( FormerPerpForce[i] ) );
                 double_prop_.push_back( &( DeltaPerpForce[i] ) );
@@ -132,6 +134,8 @@ void Particles::initialize( unsigned int nParticles, unsigned int nDim, bool kee
                 }
             }
         }
+
+        cout << " sono qui alla fine di 2: " << double_prop_.size() << "\n";
     }
 }
 
@@ -148,6 +152,8 @@ void Particles::initialize( unsigned int nParticles, Particles &part )
 
     has_Monte_Carlo_process = part.has_Monte_Carlo_process;
 
+    //debug
+    cout << " sono qui 0:" << part.has_to_keep_former_force << "\n";
     has_to_keep_former_force = part.has_to_keep_former_force;
     
     if( part.interpolated_fields_ && ! interpolated_fields_ ) {
@@ -279,6 +285,8 @@ void Particles::resize( unsigned int nParticles,
 
     //#ifdef SMILEI_SFQEDTOOLKIT
     if( has_to_keep_former_force ) {
+        //debug
+        cout << " sono qui 1\n";
         FormerPerpForce.resize( 3 ) ;
         DeltaPerpForce.resize( 3 );
         for( unsigned int i = 0; i < 3; i++ ) {
@@ -407,6 +415,9 @@ void Particles::copyParticle( unsigned int ipart )
 // ---------------------------------------------------------------------------------------------------------------------
 void Particles::copyParticle( unsigned int ipart, Particles &dest_parts )
 {
+
+    //debug
+    cout << "prima del pushback: " << double_prop_.size() << '\n';
     for( unsigned int iprop=0 ; iprop<double_prop_.size() ; iprop++ ) {
         dest_parts.double_prop_[iprop]->push_back( ( *double_prop_[iprop] )[ipart] );
     }
