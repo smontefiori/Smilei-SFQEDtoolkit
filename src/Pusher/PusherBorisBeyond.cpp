@@ -176,20 +176,22 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
                                                 delta, part_gamma, part_chi);
 
         prevPerpF_x[ipart] = Lorentz_F_Old[0];
-        prevPerpF_y[ipart] = prevPerpF_y[ipart] + 1.;
-        prevPerpF_z[ipart] = prevPerpF_z[ipart] + 1.;
+        prevPerpF_y[ipart] = Lorentz_F_Old[1];
+        prevPerpF_z[ipart] = Lorentz_F_Old[2];
 
-        deltaPerpF_x[ipart] = deltaPerpF_x[ipart] - 1.;
-        deltaPerpF_y[ipart] = deltaPerpF_y[ipart] - 1.;
-        deltaPerpF_z[ipart] = deltaPerpF_z[ipart] - 1.;
+        deltaPerpF_x[ipart] = Delta_Lorentz_F_Old[0];
+        deltaPerpF_y[ipart] = Delta_Lorentz_F_Old[1];
+        deltaPerpF_z[ipart] = Delta_Lorentz_F_Old[2];
 
         std::cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
             << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
-            << position_x[ipart] << " " << justCreated[ipart] << "\n";
+            << position_x[ipart] << " " << justCreated[ipart] << "\n" << std::flush;
 
         if(justCreated[ipart]){
             justCreated[ipart] = false;
         }
+
+        justCreated[ipart] = aux_bool;
 
         //update momentum
         momentum_x[ipart] = pxsm;
