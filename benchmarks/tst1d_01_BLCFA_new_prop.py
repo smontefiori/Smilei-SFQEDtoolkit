@@ -32,7 +32,7 @@ Main(
     cell_length = [cell_l],
     grid_length  = [grid_l],
     
-    number_of_patches = [ 2 ],
+    number_of_patches = [ 4 ],
     
     timestep = L/rest,
     simulation_time = sim_time,

@@ -97,7 +97,11 @@ public:
                 || pusher == "borisBTIS3" // relativistic Boris pusher with B-TIS3 interpolation
                 || pusher == "ponderomotive_borisBTIS3" ){
             } else if (pusher == "borisby") { // for the beyond LCFA pusher we need to track the previous forces
+                #ifdef SMILEI_SFQEDTOOLKIT 
                 this_species->particles->has_to_keep_former_force = true;
+                #else
+                ERROR_NAMELIST( "Compile Smilei with 'make config=sfqedtoolkit' if you want to use the 'borisby' pusher!",
+                #endif
             } else {
                 ERROR_NAMELIST( "For species `" << species_name << "`, pusher must be 'boris', 'borisnr', 'vay', 'higueracary', 'ponderomotive_boris','borisBTIS3', 'ponderomotive_borisBTIS3'",
                 LINK_NAMELIST + std::string("#pusher") );

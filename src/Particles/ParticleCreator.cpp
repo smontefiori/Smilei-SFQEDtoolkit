@@ -833,7 +833,7 @@ void ParticleCreator::createMomentum( std::string momentum_initialization,
     // -------------------------------------------------------------------------
     if( species->mass_ > 0 ) {
 
-//#ifdef SMILEI_SFQEDTOOLKIT
+#ifdef SMILEI_SFQEDTOOLKIT
         if(particles->has_to_keep_former_force){
             for( unsigned int p=iPart; p<iPart+nPart; p++ ) {                                 
                 particles->formerPerpForce( 0, p ) = 0.0;
@@ -845,7 +845,7 @@ void ParticleCreator::createMomentum( std::string momentum_initialization,
                 particles->justCreated( p ) = 1;
             }
         }
-//#endif
+#endif
 
         // Cold distribution
         if( momentum_initialization == "cold" ) {

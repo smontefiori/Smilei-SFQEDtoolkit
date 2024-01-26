@@ -66,14 +66,14 @@ ostream &operator << ( ostream &out, const Particle &particle )
         out << particle.Chi << " " ;
     }
     
-    //#ifdef SMILEI_SFQEDTOOLKIT
+    #ifdef SMILEI_SFQEDTOOLKIT
     if( 0 ) {
         for( unsigned int i=0; i<3; i++ ) {
             out << particle.FormerPerpForce[i] << " ";
             out << particle.DeltaPerpForce[i] << " ";
         }
     }
-    //#endif
+    #endif
 
     if( 0 ) {
         out << particle.Tau << " " ;
