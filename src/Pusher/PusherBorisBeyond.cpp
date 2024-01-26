@@ -134,6 +134,34 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         //debug
         //***************************************************
 
+        // prevPerpF_x[ipart] = prevPerpF_x[ipart] + 1.;
+        // prevPerpF_y[ipart] = prevPerpF_y[ipart] + 1.;
+        // prevPerpF_z[ipart] = prevPerpF_z[ipart] + 1.;
+
+        // deltaPerpF_x[ipart] = deltaPerpF_x[ipart] - 1.;
+        // deltaPerpF_y[ipart] = deltaPerpF_y[ipart] - 1.;
+        // deltaPerpF_z[ipart] = deltaPerpF_z[ipart] - 1.;
+
+        // std::cout << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
+        //     << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
+        //     << position_x[ipart] << " " << justCreated[ipart] << "\n";
+
+        // if(justCreated[ipart]){
+        //     justCreated[ipart] = false;
+        // }
+
+        // //update momentum
+        // momentum_x[ipart] = pxsm;
+        // momentum_y[ipart] = pysm;
+        // momentum_z[ipart] = pzsm;
+
+        // local_invgf = 1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
+        // invgf[ipart2] = local_invgf; //1. / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
+        // local_invgf *= dt;
+
+        //debug 2
+        //***************************************************
+
         double pushed_momentum[] = {pxsm, pysm, pzsm};
         double momentum[] = {momentum_x[ipart], momentum_y[ipart], momentum_z[ipart]};
         double Lorentz_F_Old[] = {prevPerpF_x[ipart], prevPerpF_y[ipart], prevPerpF_z[ipart]};
@@ -147,7 +175,7 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
                                                 aux_bool,
                                                 delta, part_gamma, part_chi);
 
-        prevPerpF_x[ipart] = prevPerpF_x[ipart] + 1.;
+        prevPerpF_x[ipart] = Lorentz_F_Old[0];
         prevPerpF_y[ipart] = prevPerpF_y[ipart] + 1.;
         prevPerpF_z[ipart] = prevPerpF_z[ipart] + 1.;
 
