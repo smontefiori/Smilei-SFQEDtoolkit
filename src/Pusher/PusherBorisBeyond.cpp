@@ -230,6 +230,7 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
                                                 aux_bool,
                                                 delta, part_gamma, part_chi);
 
+
         // std::cout << justCreated[ipart] << ' ' << aux_bool << ' ' << Lorentz_F_Old[0] << ' ' << Delta_Lorentz_F_Old[0] << "\n" << std::flush;
 
         //update momentum
@@ -263,10 +264,11 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         // std::cout << local_invgf << ' ' << dt << ' ' << std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm ) << "\n" << std::flush;
         local_invgf = dt / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
 
-        std::cout << "from pusher: " << part_gamma << " " << chi[ipart] << " " << tau[ipart] << " "
-                                << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
-                                << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
-                                << justCreated[ipart] << '\n'; 
+        //debug
+        // std::cout << "from pusher: " << part_gamma << " " << chi[ipart] << " " << tau[ipart] << " "
+        //                         << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
+        //                         << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
+        //                         << justCreated[ipart] << '\n'; 
 
         //***************************************************
 
