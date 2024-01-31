@@ -131,7 +131,6 @@ mom = np.array([[mom_x],[0.],[0.]])
 # Loop to create all the species
 # One species per radiation implementations
 for i,radiation in enumerate(radiation_list):
-    """
     Species(
         name = "electron_" + species_name_list[i],
         position_initialization = "regular",
@@ -160,6 +159,7 @@ for i,radiation in enumerate(radiation_list):
         boundary_conditions = [["remove", "remove"]],
         radiation_photon_species = "synchro_photon",
     )
+    """
 
 
 #   The mc synchrotron photon emitted will be stored here.
