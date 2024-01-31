@@ -68,7 +68,7 @@ species_name_list = ["MC"]            # Name of the species
 datetime = datetime.datetime.now()
 random_seed = datetime.microsecond
 
-global_every = 200
+global_every = 20
 
 # ----------------------------------------------------------------------------------------
 # User-defined functions
@@ -123,10 +123,15 @@ LaserPlanar1D(
 # ----------------------------------------------------------------------------------------
 # Species
 
+mom_x = math.sqrt(gamma**2 - 1.)
+
+pos = np.array([[xcenter],[1]])
+mom = np.array([[mom_x],[0.],[0.]])
+
 # Loop to create all the species
 # One species per radiation implementations
 for i,radiation in enumerate(radiation_list):
-
+    """
     Species(
         name = "electron_" + species_name_list[i],
         position_initialization = "regular",
@@ -140,6 +145,18 @@ for i,radiation in enumerate(radiation_list):
         temperature = [0.],
         pusher = pusher,
         radiation_model = radiation,
+        boundary_conditions = [["remove", "remove"]],
+        radiation_photon_species = "synchro_photon",
+    )
+    """
+    Species(
+        name = "electron_" + species_name_list[i],
+        position_initialization = pos,
+        momentum_initialization = mom,
+        pusher="borisby",
+        mass = 1.0,
+        charge = -1.0,
+        radiation_model = "sfqedtk-bydlcfa",
         boundary_conditions = [["remove", "remove"]],
         radiation_photon_species = "synchro_photon",
     )

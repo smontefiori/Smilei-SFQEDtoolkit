@@ -260,6 +260,11 @@ void PusherBorisBeyond::operator()( Particles &particles, SmileiMPI *smpi, int i
         // std::cout << local_invgf << ' ' << dt << ' ' << std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm ) << "\n" << std::flush;
         local_invgf = dt / std::sqrt( 1.0 + pxsm*pxsm + pysm*pysm + pzsm*pzsm );
 
+        cout << "from pusher: " << 1. / invgf[ipart2] << " " << chi[ipart] << " " << deltaBLCFA[ipart2] << " "
+                                << prevPerpF_x[ipart] << " " << prevPerpF_y[ipart] << " " << prevPerpF_z[ipart] << " "
+                                << deltaPerpF_x[ipart] << " " << deltaPerpF_y[ipart] << " " << deltaPerpF_z[ipart] << " "
+                                << justCreated[ipart] << '\n'; 
+
         //***************************************************
 
         // Move the particle
