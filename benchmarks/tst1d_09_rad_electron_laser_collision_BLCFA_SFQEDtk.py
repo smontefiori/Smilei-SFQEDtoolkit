@@ -172,7 +172,7 @@ Species(
   mass = 0.0,
   charge = 0.0,
   number_density = 0.0,
-  boundary_conditions = [["stop", "stop"]], #[["remove", "remove"],["remove", "remove"]],
+  boundary_conditions = [["remove", "remove"]], #[["remove", "remove"],["remove", "remove"]],
 )
 # ----------------------------------------------------------------------------------------
 # Radiation parameters
