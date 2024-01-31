@@ -95,6 +95,9 @@ protected:
     //! Espilon to check when tau is near 0
     const double epsilon_tau_ = 1e-100;
 
+    //! normalized compton time
+    double norm_Compton_time;
+
 private:
 
 };

@@ -36,6 +36,11 @@ RadiationMonteCarloSFQEDtoolkitBeyond::RadiationMonteCarloSFQEDtoolkitBeyond( Pa
     max_photon_emissions_             = species->radiation_max_emissions_;
     radiation_photon_gamma_threshold_ = species->radiation_photon_gamma_threshold_;
     inv_radiation_photon_sampling_    = 1. / radiation_photon_sampling_;
+
+    //compton time in seconds
+    norm_Compton_time = 1.2880887e-21;
+    //normalized compton time
+    norm_Compton_time *= params.reference_angular_frequency_SI;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -325,21 +330,14 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
         // Since the BLCFA montecarlo method consists of
         // a rejection method, you cannot split your 
         // timestep into sub steps and reiterate
-        
-        // Gamma (we use the midstep one prepared during the beyond pusher)
-        const double particle_gamma = 1. / invgf[ipart-ipart_ref];
-
-        // does not apply the MC routine for particles with 0 kinetic energy
-        if( particle_gamma < 1.1 ){
-            continue;
-        }
-
-        const double pushed_particle_gamma = std::sqrt( 1.0 + momentum_x[ipart]*momentum_x[ipart]
-                                                        + momentum_y[ipart]*momentum_y[ipart]
-                                                        + momentum_z[ipart]*momentum_z[ipart] );
 
         // quantum nonlinearity parameter chi (we use the midstep one prepared during the beyond pusher)
         const double particle_chi = chi[ipart];
+
+        //retrieve the vector storing the lorentz force currently acting on the particle
+        const double Lorentz_F[] = {LorentzF_x[ipart], LorentzF_y[ipart], LorentzF_z[ipart]};
+
+        const double modulus_F = sqrt(Lorentz_F[0]*Lorentz_F[0] + Lorentz_F[1]*Lorentz_F[1] + Lorentz_F[2]*Lorentz_F[2]);
         
         // Computation of the Lorentz invariant quantum parameter
         // Radiation::computeParticleChi( charge_over_mass_square,
@@ -350,6 +348,18 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
 
         // Update the quantum parameter in species
         // chi[ipart] = particle_chi;
+        
+        // Gamma (we use the midstep one prepared during the beyond pusher)
+        const double particle_gamma = particle_chi / (norm_Compton_time * modulus_F);
+
+        // does not apply the MC routine for particles with 0 kinetic energy
+        if( particle_gamma < 1.1 ){
+            continue;
+        }
+
+        const double pushed_particle_gamma = std::sqrt( 1.0 + momentum_x[ipart]*momentum_x[ipart]
+                                                        + momentum_y[ipart]*momentum_y[ipart]
+                                                        + momentum_z[ipart]*momentum_z[ipart] );
 
         // [SFQEDtoolkit beyond modification: the local sub iterations are no longer needed in this case]
         
@@ -370,15 +380,17 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
         initial_seed_1 = random_number;
         #endif
 
-        const double delta = deltaBLCFA[ipart-ipart_ref];
+        const double delta = tau[ipart];
 
         double rate = SFQED_INV_COMPTON_rate(particle_gamma, particle_chi);
 
         std::cout << "from radiation: " << particle_gamma << " " << particle_chi << " " << rate << " " << dt_ << " " << delta << " "
-                                    << random_number << " " << LorentzF_x[ipart] << " " << LorentzF_y[ipart] << " " << LorentzF_z[ipart] << '\n'; 
+                                    << random_number << " " << radiation_photon_gamma_threshold_ << " " << LorentzF_x[ipart] << " " << LorentzF_y[ipart] << " " << LorentzF_z[ipart] << '\n'; 
 
         // Discontinuous emission: emission under progress (the cross section is computed inside the if)
         if(delta >= 0. && rate * dt_> random_number ) {
+
+            std::cout << "emitting!\n";
 
             // Draw random 2 number in [0,1[
             
@@ -415,8 +427,6 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
 
             // [from SFQEDtoolkit]
             //***********************************************
-            const double Lorentz_F[] = {LorentzF_x[ipart], LorentzF_y[ipart], LorentzF_z[ipart]};
-            
             double LCFA_threshold = SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_raw(Lorentz_F,
                                                         delta,
                                                         particle_gamma,
