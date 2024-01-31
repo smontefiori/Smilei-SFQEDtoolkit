@@ -374,7 +374,7 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
 
         double rate = SFQED_INV_COMPTON_rate(particle_gamma, particle_chi);
 
-        cout << "from radiation: " << particle_gamma << " " << particle_chi << " " << rate << " " << dt_ << " " << delta << " "
+        std::cout << "from radiation: " << particle_gamma << " " << particle_chi << " " << rate << " " << dt_ << " " << delta << " "
                                     << random_number << " " << LorentzF_x[ipart] << " " << LorentzF_y[ipart] << " " << LorentzF_z[ipart] << '\n'; 
 
         // Discontinuous emission: emission under progress (the cross section is computed inside the if)
