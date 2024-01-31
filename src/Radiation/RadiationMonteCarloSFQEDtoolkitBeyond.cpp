@@ -390,7 +390,7 @@ void RadiationMonteCarloSFQEDtoolkitBeyond::operator()(
         // Discontinuous emission: emission under progress (the cross section is computed inside the if)
         if(delta >= 0. && SFQED_INV_COMPTON_rate(particle_gamma, particle_chi) * dt_> random_number ) {
 
-            std::cout << "emitting!\n";
+            // std::cout << "emitting!\n";
 
             // Draw random 2 number in [0,1[
             

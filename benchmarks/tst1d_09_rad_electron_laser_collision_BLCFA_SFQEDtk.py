@@ -146,6 +146,7 @@ for i,radiation in enumerate(radiation_list):
         radiation_model = radiation,
         boundary_conditions = [["remove", "remove"]],
         radiation_photon_species = "synchro_photon",
+        radiation_photon_gamma_threshold = 0,
     )
     """
     Species(
@@ -171,7 +172,7 @@ Species(
   mass = 0.0,
   charge = 0.0,
   number_density = 0.0,
-  boundary_conditions = [["remove", "remove"]], #[["remove", "remove"],["remove", "remove"]],
+  boundary_conditions = [["stop", "stop"]], #[["remove", "remove"],["remove", "remove"]],
 )
 # ----------------------------------------------------------------------------------------
 # Radiation parameters
