@@ -135,7 +135,7 @@ for i,radiation in enumerate(radiation_list):
         name = "electron_" + species_name_list[i],
         position_initialization = "regular",
         momentum_initialization = "cold",
-        particles_per_cell = 100000,
+        particles_per_cell = 500000,
         c_part_max = 1.0,
         mass = 1.0,
         charge = -1.0,
@@ -146,7 +146,7 @@ for i,radiation in enumerate(radiation_list):
         radiation_model = radiation,
         boundary_conditions = [["remove", "remove"]],
         radiation_photon_species = "synchro_photon",
-        radiation_photon_gamma_threshold = 0,
+        radiation_photon_gamma_threshold = 0.0001,
     )
     """
     Species(
@@ -178,8 +178,8 @@ Species(
 # Radiation parameters
 
 RadiationReaction(
-    minimum_chi_continuous = 1e4,
-    minimum_chi_discontinuous = 1e-5,
+    minimum_chi_continuous = 1e5,
+    minimum_chi_discontinuous = 1e-6,
     #table_path = "./"
 )
 
@@ -253,5 +253,5 @@ DiagParticleBinning(
     deposited_quantity = "weight",
     every = global_every,
     species =["synchro_photon"], 
-    axes = [["ekin", 0., gamma, int(gamma/9)]]
+    axes = [["ekin", 0., gamma, 10000]]
 ) 
