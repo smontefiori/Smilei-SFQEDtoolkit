@@ -62,7 +62,9 @@ gamma = 9784.7 #1000./0.511             # Electron bunch initial energy
 v = math.sqrt(1 - 1./gamma**2)          # electron bunch initial velocity
 
 pusher = "borisby"                         # type of pusher
+# pusher = "boris"                         # type of pusher
 radiation_list = ["sfqedtk-bydlcfa"] # List of radiation models
+# radiation_list = ["sfqedtk-lcfa"] # List of radiation models
 species_name_list = ["MC"]            # Name of the species
 
 datetime = datetime.datetime.now()
@@ -146,7 +148,7 @@ for i,radiation in enumerate(radiation_list):
         radiation_model = radiation,
         boundary_conditions = [["remove", "remove"]],
         radiation_photon_species = "synchro_photon",
-        radiation_photon_gamma_threshold = 0.0001,
+        radiation_photon_gamma_threshold = 0.00001,
     )
     """
     Species(
@@ -253,5 +255,5 @@ DiagParticleBinning(
     deposited_quantity = "weight",
     every = global_every,
     species =["synchro_photon"], 
-    axes = [["ekin", 0., gamma, 10000]]
+    axes = [["ekin", 0., gamma, 100000]]
 ) 

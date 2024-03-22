@@ -19,6 +19,10 @@
 #include "Params.h"
 #include "Random.h"
 
+#ifdef SMILEI_SFQEDTOOLKIT
+#include "SFQEDtoolkit_Interface.hpp"
+#endif
+
 //  ----------------------------------------------------------------------------
 //! Class Radiation
 //  ----------------------------------------------------------------------------
